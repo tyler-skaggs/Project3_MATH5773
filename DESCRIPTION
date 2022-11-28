@@ -1,0 +1,13 @@
+Package: MATH5773Skag0011Proj3
+Type: Package
+Title: MATH 5773 Project 3: Validity, Bootstrap, Bayes, and Shiny
+Version: 0.1.0
+Author: Tyler J. Skaggs
+Maintainer: The package maintainer <tyler.j.skaggs-1@ou.edu>
+Description: This package contains 4 functions. One will examine the validity of
+    a MLR model, another will conduct a bootstrap analysis of a model, another will
+    preform a Bayesian analaysis, and the final will run a shiny server app to create
+    basic plots.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
