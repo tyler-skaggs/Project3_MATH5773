@@ -1,7 +1,3 @@
-library(shiny)
-library(ggplot2)
-source("Rcode.R")
-
 ui <- fluidPage(
   navbarPage("User Interface:",
              tabPanel("Upload",
@@ -37,7 +33,11 @@ ui <- fluidPage(
              tabPanel("Graphing",
                       sidebarLayout(
                         sidebarPanel( uiOutput("variable_x"),
-                                      uiOutput("variable_y")),
+                                      uiOutput("variable_y"),
+                                      actionButton("addline", "Add Updated Line"),
+                                      actionButton("resetline", "Reset Lines"),
+                                      verbatimTextOutput("LineInfo")
+                                      ),
 
                       mainPanel(
                         h3(textOutput("caption")),
@@ -82,20 +82,49 @@ server <- function(input, output, session) {
   })
 
   dat <- reactive({
-    test <- data.frame(data()[[input$variableNames_x]], data()[[input$variableNames_y]], rep(FALSE, nrow(data())))
-    colnames(test) <- c("X", "Y", "sel")
+    test <- data.frame(data()[[input$variableNames_x]], data()[[input$variableNames_y]])
+    colnames(test) <- c("X", "Y")
     return(test)
   })
 
   output$plot1 <- renderPlot({
     df <- dat()
-    df$sel <- selected()
-    ggplot(df, aes(x = X, y = Y)) +
+    df$sel = selected()
+
+    g1 <- ggplot(df, aes(x = X, y = Y)) +
       geom_point(aes(color = sel)) +
       scale_colour_discrete(limits = c("TRUE", "FALSE"))
+
+    if(is.numeric(df$X) && is.numeric(df$Y)){
+      ylm <- lm(Y ~ X, data = df)
+      g1 = g1 + geom_abline(intercept = coef(ylm)[1], slope = coef(ylm)[2], col = "red")
+    }
+
+    if(length(linedata()) != 0 ){
+      for(i in 1:length(linedata())){
+        g1 = g1 + geom_abline(intercept = linedata()[[i]]$coefficients[1],
+                              slope = linedata()[[i]]$coefficients[2])
+      }
+    }
+
+    return(g1)
   }, res = 96)
 
   selected <- reactiveVal(rep(FALSE))
+
+  linedata <- reactiveVal(list())
+
+  observeEvent(input$addline, {
+    df <- dat()
+    df$sel = selected()
+    newdf <- df[which(df$sel == TRUE),]
+    if(dim(newdf)[1] != 0){
+      ylm <- lm(Y ~ X, data = newdf)
+      newlist <- linedata()
+      newlist <- append(newlist, list(c(summary(ylm))))
+      linedata( newlist )
+    }
+  })
 
   observeEvent(input$plot_brush, {
     brushed <- brushedPoints(dat(), input$plot_brush, allRows = TRUE)$selected_
@@ -104,8 +133,43 @@ server <- function(input, output, session) {
 
   })
 
+  observeEvent(input$file1$datapath , {
+    linedata(list())
+    selected(rep(FALSE))
+  })
+
+  observeEvent(input$resetline, {
+    linedata(list())
+  })
+
   observeEvent(input$plot_reset, {
     selected(rep(FALSE, nrow(dat())))
+    linedata(list())
+  })
+
+  output$LineInfo <- renderText({
+    df <- dat()
+    str <- paste0("Line Information\n")
+    if(is.numeric(df$X) && is.numeric(df$Y)){
+      ylm <- lm(Y ~ X, dat())
+      sum.ylm <- summary(ylm)
+      str = paste0(str, "Main (red) line information: \n\t",
+             "y = ", round(coef(ylm)[2],4), "x  + ", round(coef(ylm)[1],4), "\n\t",
+             "R.sqd = ", round(sum.ylm$r.squared, 6), " | Std Error: ", round(sum.ylm$sigma, 6),
+             " with df = ", sum.ylm$df[2])
+
+      if(length(linedata()) != 0 ){
+        for(i in 1:length(linedata())){
+
+          str = paste0(str, "\nLine ", i, " information: \n\t",
+                       "y = ", round(linedata()[[i]]$coefficients[2],6), "x  + ", round(linedata()[[i]]$coefficients[1],6), "\n\t",
+                       "R.sqd = ", round(linedata()[[i]]$r.squared, 6), " | Std Error: ", round(linedata()[[i]]$sigma, 6),
+                       " with df = ", linedata()[[i]]$df[2]
+                       )
+        }
+      }
+    }
+    return(str)
   })
 
   output$info <- renderText({
@@ -128,4 +192,3 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
-

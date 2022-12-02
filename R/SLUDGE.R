@@ -1,6 +1,6 @@
 #' Sludge Data information
 #'
-#' Data set of Browser test information.
+#' Data set of Methane in Sludge.
 #'    Data frame of 27 rows and 4 columns
 #'
 #' @format A data frame with 27 rows and 4 column(s)
