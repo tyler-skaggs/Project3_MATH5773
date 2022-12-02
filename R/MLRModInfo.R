@@ -10,7 +10,24 @@
 #' @importFrom gridExtra grid.arrange
 #' @importFrom crayon red
 #'
-#' @return Fancy List
+#' @return This function will return 2 plots (in one window). There is a plot of
+#'    residuals vs predicted, and a plot of cooks distance. The
+#'    following are also returned in a named list:
+#'    \itemize{
+#'       \item{InfMeasures}{A dataframe that contains the indicies and reasons for which
+#'       data values could be considered as having high influence}
+#'       \item{model}{model pased into the function}
+#'       \item{anova}{A summary output from an anova test on the model}
+#'       \item{resids}{A vector of residuals from the model}
+#'       \item{Fval}{Fval information from summary of model}
+#'       \item{r.sqd}{The calculated \eqn{r^2} value of the model, supplied by \code{lm}}
+#'       \item{AIC}{The calculated AIC value of the model}
+#'       \item{shapiro}{shapiro test of normality on Y data}
+#'       \item{CI}{Confidence interval for model}
+#'       \item{NewModel}{A possibly better model found by `step`}
+#'       \item{names}{names of colums in the data set}
+#'    }
+#'
 #' @export
 #'
 #' @examples
@@ -35,6 +52,13 @@ MLRModInfo <- function(model, data, alpha = 0.05){
 
   if(is.numeric(ylm)){
     cat(red("ERROR: Could not construct linear model, check 'model' and 'data'."))
+    my_list = list()
+    class(my_list) <- "skag0011Fun1"
+    return(invisible(my_list))
+  }
+
+  if(!is.numeric(alpha) || alpha > 1 || alpha < 0){
+    cat(red("ERROR: 'alpha' should be a numeric between 0 and 1"))
     my_list = list()
     class(my_list) <- "skag0011Fun1"
     return(invisible(my_list))
