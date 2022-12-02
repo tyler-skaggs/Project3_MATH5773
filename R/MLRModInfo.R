@@ -6,6 +6,7 @@
 #'
 #' @importFrom ggplot2 ggplot geom_point aes geom_segment geom_hline theme_bw geom_abline
 #'    geom_col stat_qq_line stat_qq labs ggtitle scale_color_continuous
+#' @importFrom stats AIC anova coef confint influence.measures lm model.matrix resid
 #' @importFrom gridExtra grid.arrange
 #' @importFrom crayon red
 #'

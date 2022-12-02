@@ -1,5 +1,6 @@
 #' shinyplts: Runs included shiny app
 #'
+#' @importFrom shiny runApp
 #'
 #' @return Shiny Server
 #'

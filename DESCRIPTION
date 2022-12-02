@@ -14,7 +14,11 @@ LazyData: true
 RoxygenNote: 7.2.1
 Depends: 
     R (>= 2.10),
-    gridExtra,
     ggplot2,
-    crayon,
-    purrr
+    crayon
+Imports:
+    gridExtra,
+    purrr,
+    shiny,
+    MCMCpack
+
