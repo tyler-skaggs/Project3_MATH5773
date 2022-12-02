@@ -144,7 +144,6 @@ server <- function(input, output, session) {
 
   observeEvent(input$plot_reset, {
     selected(rep(FALSE, nrow(dat())))
-    linedata(list())
   })
 
   output$LineInfo <- renderText({
