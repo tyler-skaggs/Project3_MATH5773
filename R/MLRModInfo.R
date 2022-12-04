@@ -10,6 +10,13 @@
 #' @importFrom gridExtra grid.arrange
 #' @importFrom crayon red
 #'
+#' @description This functions will conduct an analysis on a MLR model passed in. It looks
+#'    at the residuals and creates helpful plots, it will look at the 'y' data to check if it
+#'    normally distributed (an assumption nessicary for MLR analysis). Helpful statistics are
+#'    produced to look at the model. We also attempt to create a "better" model from the step()
+#'    function (using AIC). This model is returned. A summary() of the output of this function is
+#'    quite helpful.
+#'
 #' @return This function will return 2 plots (in one window). There is a plot of
 #'    residuals vs predicted, and a plot of cooks distance. The
 #'    following are also returned in a named list:

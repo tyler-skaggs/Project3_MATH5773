@@ -14,10 +14,31 @@ MLRModInfo(model, data, alpha = 0.05)
 \item{alpha}{Value for 1 - alpha CI}
 }
 \value{
-Fancy List
+This function will return 2 plots (in one window). There is a plot of
+   residuals vs predicted, and a plot of cooks distance. The
+   following are also returned in a named list:
+   \itemize{
+      \item{InfMeasures}{A dataframe that contains the indicies and reasons for which
+      data values could be considered as having high influence}
+      \item{model}{model pased into the function}
+      \item{anova}{A summary output from an anova test on the model}
+      \item{resids}{A vector of residuals from the model}
+      \item{Fval}{Fval information from summary of model}
+      \item{r.sqd}{The calculated \eqn{r^2} value of the model, supplied by \code{lm}}
+      \item{AIC}{The calculated AIC value of the model}
+      \item{shapiro}{shapiro test of normality on Y data}
+      \item{CI}{Confidence interval for model}
+      \item{NewModel}{A possibly better model found by `step`}
+      \item{names}{names of colums in the data set}
+   }
 }
 \description{
-MLRModInfo: Gain information about a given model and find potential better models
+This functions will conduct an analysis on a MLR model passed in. It looks
+   at the residuals and creates helpful plots, it will look at the 'y' data to check if it
+   normally distributed (an assumption nessicary for MLR analysis). Helpful statistics are
+   produced to look at the model. We also attempt to create a "better" model from the step()
+   function (using AIC). This model is returned. A summary() of the output of this function is
+   quite helpful.
 }
 \examples{
 ## Example 1

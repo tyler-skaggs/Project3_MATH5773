@@ -4,26 +4,47 @@
 \alias{BayesAnalysis}
 \title{BayesAnalysis: Bayes analysis utilinsing MCMCpack}
 \usage{
-BayesAnalysis(model, data, choice = "beta", iter = 10000, ...)
+BayesAnalysis(model, data, alpha = 0.05, choice = "beta", iter = 10000, ...)
 }
 \arguments{
 \item{model}{Model to test}
 
 \item{data}{data for model}
 
+\item{alpha}{Used to create 1-alpha CI and etc}
+
 \item{choice}{choice on how to choose b0}
 
 \item{iter}{iterations of MCMC}
 
-\item{...}{other parameters to use in MCMCregress()}
+\item{...}{other parameters to use in MCMCregress(). See \link[MCMCpack]{MCMCregress}}
 }
 \value{
-Fancy list
+This function will return a page of plots. The plots will show the Density
+   distribution, a comparison of the density distribution when the sampling is partially
+   done, the trace plots, a HPD plot, and a matrix plot of the correlation (red is negative
+   correlation and blue is positive).
+
+   There is a command line output to give a summary of the posterior distribution.#'
+
+   A named list of the following information is also supplied:
+\describe{
+  \item{posterior}{The posterior information from the analysis, supplied by `MCMCregress()`}
+  \item{quantiles}{Quantiles from the posterior distribution}
+  \item{CI}{Convidence intervals from the theoretical model, compare to `quantiles`}
+  \item{corMatrix}{Correlation matrix, can be viewed in the plot output too}
+  \item{postSum}{Object with the information from the summary output}
+}
 }
 \description{
-BayesAnalysis: Bayes analysis utilinsing MCMCpack
+This functions runs a Bayesian analysis on a model sent by the user. We look at
+   validity of of the sampling (done by Markov Chain Monte Carlo). The calculations are
+   done in \link[MCMCpack]{MCMCregress}, which utilities a multivariate Gaussian prior on the betas, and
+   an inverse Gamma prior distribution for the conditional error variance. Any argument for
+   \link[MCMCpack]{MCMCregress} can also be sent into this function. We also look at any possible
+   correlation between the samples and variance for the betas.
 }
 \examples{
 ## Example 1
-BayesAnalysis(QUALITY ~ TEMP + PRESSURE, PRODQUAL, choice = "mean", iter = 10000)
+\dontrun{t <- BayesAnalysis(QUALITY ~ TEMP + PRESSURE, PRODQUAL, iter = 10000)}
 }

@@ -8,7 +8,26 @@
 #'
 #' @importFrom purrr map walk
 #'
-#' @return Fancy List
+#' @description This function will run a bootstrap analysis on a passed in model. Specifically, we
+#'    grab a number of samples and produce \eqn{\beta} estimates of this sampled data. Occasionally it
+#'    is not possible to create such an estimate as \eqn{X'X} is sometimes a singular matrix. The output of
+#'    this function allows us to look at the distribution of estimates and compare them to the theoretical
+#'    distribution.
+#'
+#' @return This function will return a page of plots. The plots will show the distribution of the
+#'    beta values with lines corresponding to the point estimate and intervals.
+#'
+#'    A named list of the following information is also supplied:
+#' \describe{
+#'   \item{beta_iters}{The beta values attained from sampling}
+#'   \item{CI_beta}{Theoretical distribution}
+#'   \item{qbeta}{Intervals from the sampled data, compare to `CI_beta`}
+#'   \item{iter}{Number of iterations to calculate}
+#'   \item{alpha}{Used to create a 1-alpha interval}
+#'   \item{failedSamples}{A list of the samples in which a singular matrix was produced}
+#' }
+#'
+#'
 #' @export
 #'
 #' @examples
