@@ -168,6 +168,4 @@ BayesAnalysis <- function(model, data, alpha = 0.05, choice = "beta", iter = 100
 
   return(invisible(my_list))
 }
-#t <- BayesAnalysis(QUALITY ~ TEMP + PRESSURE, PRODQUAL, choice = "mean", iter = 10000)
-
 
